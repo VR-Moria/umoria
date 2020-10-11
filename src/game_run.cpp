@@ -10,6 +10,22 @@
 
 #include "headers.h"
 
+
+void writeToFile() {
+    
+    std::ofstream outfile("test.txt");
+
+    outfile << "Please work!";
+
+
+    outfile.close();
+
+}
+
+
+
+
+
 static void playDungeon();
 
 static void initializeCharacterInventory();
@@ -31,6 +47,8 @@ static void inventoryRefillLamp();
 void startMoria(int seed, bool start_new_game) {
     // Enable roguelike keys by default - this will be overridden by the
     // setting in the game save file.
+    
+
     config::options::use_roguelike_keys = true;
 
     priceAdjust();
@@ -136,7 +154,7 @@ void startMoria(int seed, bool start_new_game) {
     while (!game.character_is_dead) {
         // Dungeon logic
         playDungeon();
-
+        //threader();
         // check for eof here, see getKeyInput() in io.c
         // eof can occur if the process gets a HANGUP signal
         if (eof_flag != 0) {

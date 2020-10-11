@@ -81,6 +81,41 @@ bool coordInsidePanel(Coord_t coord) {
     return valid_y && valid_x;
 }
 
+
+void printFloorToFile(char ch) {
+   
+   
+    //print.deactivate();
+    std::ofstream outfile("print_floor_test.txt", outfile.out | outfile.app);
+    outfile << ch;
+    // for (coord.y = dg.panel.top; coord.y <= dg.panel.bottom; coord.y++) {
+
+    //      for (coord.x = dg.panel.left; coord.x <= dg.panel.right; coord.x++) {
+            
+    //         if (ch != ' ') {
+    //             outfile << ch;
+    //         }
+    //      }
+    //      outfile << "\n";
+    // }
+
+   // outfile << dg.floor;
+
+        // if (print.activated){
+        //     outfile << print.content;
+        //     print.deactivate();
+        // }
+    
+
+    outfile.close();
+}
+
+void threader(char ch) {
+    std::thread t1(printFloorToFile, ch);
+    t1.join();
+    t1.~thread();
+
+}
 // Prints the map of the dungeon -RAK-
 void drawDungeonPanel() {
     int line = 1;
@@ -96,6 +131,7 @@ void drawDungeonPanel() {
         for (coord.x = dg.panel.left; coord.x <= dg.panel.right; coord.x++) {
             char ch = caveGetTileSymbol(coord);
             if (ch != ' ') {
+                threader(ch);
                 panelPutTile(ch, coord);
             }
         }

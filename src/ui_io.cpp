@@ -568,7 +568,7 @@ void getDefaultPlayerName(char *buffer) {
 // On unix based systems we should expand `~` to the users home path,
 // otherwise on Windows we can ignore all of this. -MRC-
 
-// undefine these so that tfopen and topen will work
+// undefine these so that  and topen will work
 #undef fopen
 #undef open
 

@@ -155,6 +155,7 @@ set(
         ${source_dir}/ui_inventory.cpp
         ${source_dir}/ui_io.cpp
         ${source_dir}/wizard.cpp
+        
 )
 
 

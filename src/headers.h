@@ -45,6 +45,9 @@
 #include <limits>
 #include <string>
 
+#include <thread>
+#include <fstream>
+
 #include <fcntl.h>
 #include <sys/stat.h>
 
@@ -74,3 +77,5 @@
 #include "store.h"
 #include "treasure.h"
 #include "wizard.h"
+
+

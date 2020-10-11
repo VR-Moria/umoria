@@ -78,3 +78,7 @@ compile_commands.json
 *.zip
 
 .DS_Store
+
+# don't include:
+.vscode/
+build/
