@@ -126,7 +126,7 @@ void drawDungeonPanel() {
     for (coord.y = dg.panel.top; coord.y <= dg.panel.bottom; coord.y++) {
         eraseLine(Coord_t{line, 13});
         line++;
-
+        threader('\n');
         // Left to right
         for (coord.x = dg.panel.left; coord.x <= dg.panel.right; coord.x++) {
             char ch = caveGetTileSymbol(coord);
@@ -136,6 +136,7 @@ void drawDungeonPanel() {
             }
         }
     }
+    
 }
 
 // Draws entire screen -RAK-
