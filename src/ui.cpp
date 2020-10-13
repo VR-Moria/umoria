@@ -81,32 +81,9 @@ bool coordInsidePanel(Coord_t coord) {
     return valid_y && valid_x;
 }
 
-
 void printFloorToFile(char ch) {
-   
-   
-    //print.deactivate();
     std::ofstream outfile("print_floor_test.txt", outfile.out | outfile.app);
     outfile << ch;
-    // for (coord.y = dg.panel.top; coord.y <= dg.panel.bottom; coord.y++) {
-
-    //      for (coord.x = dg.panel.left; coord.x <= dg.panel.right; coord.x++) {
-            
-    //         if (ch != ' ') {
-    //             outfile << ch;
-    //         }
-    //      }
-    //      outfile << "\n";
-    // }
-
-   // outfile << dg.floor;
-
-        // if (print.activated){
-        //     outfile << print.content;
-        //     print.deactivate();
-        // }
-    
-
     outfile.close();
 }
 
@@ -114,10 +91,83 @@ void threader(char ch) {
     std::thread t1(printFloorToFile, ch);
     t1.join();
     t1.~thread();
+}
+
+
+void clearFile() {
+    std::ofstream ofs("print_floor_test.txt", std::ofstream::out | std::ofstream::trunc);
+    ofs.close();
+}
+
+void clear_floor_threader() {
+    std::thread t2(clearFile);
+    t2.join();
+    t2.~thread();
+}
+
+
+
+void dg_parse() {
+    for (int i = 0; i < dg.height; i++) {
+            printFloorToFile('\n');
+        for (int j = 0; j < dg.width; j++) {
+                uint8_t c = dg.floor[j][i].creature_id;
+                uint8_t t = dg.floor[j][i].treasure_id;
+                uint8_t f = dg.floor[j][i].feature_id;
+
+                if(c != 0) {
+                    printFloorToFile(creatures_list[monsters[c].creature_id].sprite);
+                } else if (t != 0) {
+                    printFloorToFile(game.treasure.list[t].sprite);
+                } else if (f  <= MAX_CAVE_FLOOR) {
+                    printFloorToFile('.');
+                } else if (f == TILE_GRANITE_WALL || f == TILE_BOUNDARY_WALL) {
+                    printFloorToFile('#');
+                } else {
+                    printFloorToFile(' ');
+                }
+                    
+        }
+    }
 
 }
+
+void PrintTileSymbol(Coord_t const &coord1) {
+    Tile_t const &tile2 = dg.floor[coord1.y][coord1.x];
+    uint8_t c = tile2.creature_id;
+    uint8_t t = tile2.treasure_id;
+    uint8_t f = tile2.feature_id;
+                if (c == 1) {
+                    printFloorToFile('@');
+                } else if(c != 0) {
+                    printFloorToFile(creatures_list[monsters[c].creature_id].sprite);
+                } else if (t != 0) {
+                    printFloorToFile(game.treasure.list[t].sprite);
+                } else if (f  <= MAX_CAVE_FLOOR) {
+                    printFloorToFile('.');
+                } else if (f == TILE_GRANITE_WALL || f == TILE_BOUNDARY_WALL || !config::options::highlight_seams) {
+                    printFloorToFile('#');
+                } else {
+                    printFloorToFile(' ');
+                }
+
+}
+
+void threader_dg_floor() {
+    std::thread thr(dg_parse);
+    thr.join();
+    thr.~thread();
+}
+
+void threader_print_tile_symbol(Coord_t const &coord12) {
+    std::thread thre(PrintTileSymbol, coord12);
+    thre.join();
+    thre.~thread();
+}
+
 // Prints the map of the dungeon -RAK-
 void drawDungeonPanel() {
+    clear_floor_threader();
     int line = 1;
 
     Coord_t coord = Coord_t{0, 0};
@@ -130,13 +180,14 @@ void drawDungeonPanel() {
         // Left to right
         for (coord.x = dg.panel.left; coord.x <= dg.panel.right; coord.x++) {
             char ch = caveGetTileSymbol(coord);
+            threader_print_tile_symbol(coord);
             if (ch != ' ') {
-                threader(ch);
+                //threader(ch);
                 panelPutTile(ch, coord);
             }
         }
     }
-    
+
 }
 
 // Draws entire screen -RAK-
@@ -155,7 +206,7 @@ void dungeonResetView() {
     if (coordOutsidePanel(py.pos, false)) {
         drawDungeonPanel();
     }
-
+    //threader_dg_floor();
     // Move the light source
     dungeonMoveCharacterLight(py.pos, py.pos);
 

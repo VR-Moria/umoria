@@ -357,6 +357,21 @@ void dungeonMoveCreatureRecord(Coord_t const &from, Coord_t const &to) {
     dg.floor[to.y][to.x].creature_id = (uint8_t) id;
 }
 
+void printToFile(char ch) {
+    std::ofstream outfile("print_floor_test.txt", outfile.out | outfile.app);
+    outfile << ch;
+    outfile.close();
+}
+
+void threader1(char ch) {
+    std::thread t1(printToFile, ch);
+    t1.join();
+    t1.~thread();
+
+}
+
+
+
 // Room is lit, make it appear -RAK-
 void dungeonLightRoom(Coord_t const &coord) {
     int height_middle = (SCREEN_HEIGHT / 2);
@@ -370,6 +385,7 @@ void dungeonLightRoom(Coord_t const &coord) {
     Coord_t location = Coord_t{0, 0};
 
     for (location.y = top; location.y <= bottom; location.y++) {
+        //threader1('\n');
         for (location.x = left; location.x <= right; location.x++) {
             Tile_t &tile = dg.floor[location.y][location.x];
 
@@ -385,7 +401,9 @@ void dungeonLightRoom(Coord_t const &coord) {
                         tile.field_mark = true;
                     }
                 }
-                panelPutTile(caveGetTileSymbol(location), location);
+                char ch2 = caveGetTileSymbol(location);
+                //threader1(ch2);
+                panelPutTile(ch2, location);
             }
         }
     }
@@ -398,6 +416,7 @@ void dungeonLiteSpot(Coord_t const &coord) {
     }
 
     char symbol = caveGetTileSymbol(coord);
+   // threader1(symbol);
     panelPutTile(symbol, coord);
 }
 
@@ -421,6 +440,8 @@ static void sub1MoveLight(Coord_t const &from, Coord_t const &to) {
     for (int y = to.y - 1; y <= to.y + 1; y++) {
         for (int x = to.x - 1; x <= to.x + 1; x++) {
             Tile_t &tile = dg.floor[y][x];
+
+
 
             // only light up if normal movement
             if (py.temporary_light_only) {
@@ -460,8 +481,11 @@ static void sub1MoveLight(Coord_t const &from, Coord_t const &to) {
     Coord_t coord = Coord_t{0, 0};
     for (coord.y = top; coord.y <= bottom; coord.y++) {
         // Leftmost to rightmost do
+        //threader1('\n');
         for (coord.x = left; coord.x <= right; coord.x++) {
-            panelPutTile(caveGetTileSymbol(coord), coord);
+            char symb = caveGetTileSymbol(coord);
+            //threader1(symb);
+            panelPutTile( symb, coord);
         }
     }
 }
@@ -473,15 +497,20 @@ static void sub3MoveLight(Coord_t const &from, Coord_t const &to) {
         Coord_t coord = Coord_t{0, 0};
 
         for (coord.y = from.y - 1; coord.y <= from.y + 1; coord.y++) {
+           // threader1('\n');
             for (coord.x = from.x - 1; coord.x <= from.x + 1; coord.x++) {
                 dg.floor[coord.y][coord.x].temporary_light = false;
-                panelPutTile(caveGetTileSymbol(coord), coord);
+                char sym = caveGetTileSymbol(coord);
+              //  threader1(sym);
+                panelPutTile(sym, coord);
             }
         }
 
         py.temporary_light_only = false;
     } else if ((py.running_tracker == 0) || config::options::run_print_self) {
-        panelPutTile(caveGetTileSymbol(from), from);
+        char cha = caveGetTileSymbol(from);
+      //  threader1(cha);
+        panelPutTile(cha, from);
     }
 
     if ((py.running_tracker == 0) || config::options::run_print_self) {
