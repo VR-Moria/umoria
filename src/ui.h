@@ -100,6 +100,9 @@ void drawDungeonPanel();
 void drawCavePanel();
 void dungeonResetView();
 
+void clear_floor_threader();
+void threader_dg_floor();
+
 void statsAsString(uint8_t stat, char *stat_string);
 void displayCharacterStats(int stat);
 void printCharacterTitle();

@@ -357,18 +357,18 @@ void dungeonMoveCreatureRecord(Coord_t const &from, Coord_t const &to) {
     dg.floor[to.y][to.x].creature_id = (uint8_t) id;
 }
 
-void printToFile(char ch) {
-    std::ofstream outfile("print_floor_test.txt", outfile.out | outfile.app);
-    outfile << ch;
-    outfile.close();
-}
+// void printToFile(char ch) {
+//     std::ofstream outfile("print_floor_test.txt", outfile.out | outfile.app);
+//     outfile << ch;
+//     outfile.close();
+// }
 
-void threader1(char ch) {
-    std::thread t1(printToFile, ch);
-    t1.join();
-    t1.~thread();
+// void threader1(char ch) {
+//     std::thread t1(printToFile, ch);
+//     t1.join();
+//     t1.~thread();
 
-}
+// }
 
 
 
@@ -515,6 +515,9 @@ static void sub3MoveLight(Coord_t const &from, Coord_t const &to) {
 
     if ((py.running_tracker == 0) || config::options::run_print_self) {
         panelPutTile('@', to);
+        clear_floor_threader();
+        threader_dg_floor();
+
     }
 }
 

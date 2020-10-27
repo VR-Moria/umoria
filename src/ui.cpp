@@ -106,30 +106,38 @@ void clear_floor_threader() {
 }
 
 
+std::string dg_parse() {
+    std::string panel;
+    Coord_t coord = Coord_t{0, 0};
+    for (coord.y = dg.panel.top; coord.y <= dg.panel.bottom; coord.y++) {
+            panel += "\n";
+        for (coord.x = dg.panel.left; coord.x <= dg.panel.right; coord.x++) {
+                uint8_t c = dg.floor[coord.y][coord.x].creature_id;
+                uint8_t t = dg.floor[coord.y][coord.x].treasure_id;
+                uint8_t f = dg.floor[coord.y][coord.x].feature_id;
 
-void dg_parse() {
-    for (int i = 0; i < dg.height; i++) {
-            printFloorToFile('\n');
-        for (int j = 0; j < dg.width; j++) {
-                uint8_t c = dg.floor[j][i].creature_id;
-                uint8_t t = dg.floor[j][i].treasure_id;
-                uint8_t f = dg.floor[j][i].feature_id;
-
-                if(c != 0) {
-                    printFloorToFile(creatures_list[monsters[c].creature_id].sprite);
+                if (c == 1) {
+                    panel += "@";
+                } else if (c != 0) {
+                    panel += creatures_list[monsters[c].creature_id].sprite;
+                    //printFloorToFile(creatures_list[monsters[c].creature_id].sprite);
                 } else if (t != 0) {
-                    printFloorToFile(game.treasure.list[t].sprite);
+                    panel += game.treasure.list[t].sprite;
+                    //printFloorToFile(game.treasure.list[t].sprite);
                 } else if (f  <= MAX_CAVE_FLOOR) {
-                    printFloorToFile('.');
+                    panel += ".";
+                   // printFloorToFile('.');
                 } else if (f == TILE_GRANITE_WALL || f == TILE_BOUNDARY_WALL) {
-                    printFloorToFile('#');
+                    panel += "#";
+                    //printFloorToFile('#');
                 } else {
-                    printFloorToFile(' ');
+                    panel +=" ";
+                    //printFloorToFile(' ');
                 }
                     
         }
     }
-
+    return panel;
 }
 
 void PrintTileSymbol(Coord_t const &coord1) {
@@ -153,8 +161,17 @@ void PrintTileSymbol(Coord_t const &coord1) {
 
 }
 
+
+
+void print_panel() {
+    std::ofstream outfile("print_floor_test.txt", outfile.out | outfile.app);
+    outfile << dg_parse();
+    outfile.close();
+}
+
+//Threader paired with dg_parse
 void threader_dg_floor() {
-    std::thread thr(dg_parse);
+    std::thread thr(print_panel);
     thr.join();
     thr.~thread();
 }
@@ -176,17 +193,19 @@ void drawDungeonPanel() {
     for (coord.y = dg.panel.top; coord.y <= dg.panel.bottom; coord.y++) {
         eraseLine(Coord_t{line, 13});
         line++;
-        threader('\n');
+       // threader('\n');
         // Left to right
         for (coord.x = dg.panel.left; coord.x <= dg.panel.right; coord.x++) {
             char ch = caveGetTileSymbol(coord);
-            threader_print_tile_symbol(coord);
+           // threader_print_tile_symbol(coord);
             if (ch != ' ') {
                 //threader(ch);
                 panelPutTile(ch, coord);
             }
         }
     }
+
+    threader_dg_floor();
 
 }
 
