@@ -517,7 +517,7 @@ static void sub3MoveLight(Coord_t const &from, Coord_t const &to) {
         panelPutTile('@', to);
         clear_floor_threader();
         threader_dg_floor();
-
+ 
     }
 }
 
