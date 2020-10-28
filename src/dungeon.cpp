@@ -357,18 +357,18 @@ void dungeonMoveCreatureRecord(Coord_t const &from, Coord_t const &to) {
     dg.floor[to.y][to.x].creature_id = (uint8_t) id;
 }
 
-// void printToFile(char ch) {
-//     std::ofstream outfile("print_floor_test.txt", outfile.out | outfile.app);
-//     outfile << ch;
-//     outfile.close();
-// }
 
-// void threader1(char ch) {
-//     std::thread t1(printToFile, ch);
-//     t1.join();
-//     t1.~thread();
+ /*void printFloorToFile(char ch) {
+     std::ofstream outfile("print_floor_test.txt", std::ofstream::out | std::ofstream::app);
+     outfile << ch;
+     outfile.close();
+ }
 
-// }
+ void threader(char ch) {
+     std::thread t1(printFloorToFile, ch);
+     t1.join();
+     t1.~thread();
+ }*/
 
 
 

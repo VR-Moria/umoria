@@ -82,7 +82,7 @@ bool coordInsidePanel(Coord_t coord) {
 }
 
 void printFloorToFile(char ch) {
-    std::ofstream outfile("print_floor_test.txt", outfile.out | outfile.app);
+    std::ofstream outfile("print_floor_test.txt", std::ofstream::out | std::ofstream::app);
     outfile << ch;
     outfile.close();
 }
@@ -164,7 +164,7 @@ void PrintTileSymbol(Coord_t const &coord1) {
 
 
 void print_panel() {
-    std::ofstream outfile("print_floor_test.txt", outfile.out | outfile.app);
+    std::ofstream outfile("print_floor_test.txt", std::ofstream::out | std::ofstream::app);
     outfile << dg_parse();
     outfile.close();
 }
