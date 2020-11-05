@@ -11,17 +11,6 @@
 #include "headers.h"
 
 
-void writeToFile() {
-    
-    std::ofstream outfile("test.txt");
-
-    outfile << "Please work!";
-
-
-    outfile.close();
-
-}
-
 
 
 
@@ -150,11 +139,16 @@ void startMoria(int seed, bool start_new_game) {
         generateCave();
     }
 
+
+    // initialize struct vessel hold to contain pointers to py and dg for VR use
+    hold.py = &py;
+    hold.dg = &dg;
+
     // Loop till dead, or exit
     while (!game.character_is_dead) {
         // Dungeon logic
         playDungeon();
-        //threader();
+        
         // check for eof here, see getKeyInput() in io.c
         // eof can occur if the process gets a HANGUP signal
         if (eof_flag != 0) {
