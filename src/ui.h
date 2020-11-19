@@ -100,11 +100,7 @@ void drawDungeonPanel();
 void drawCavePanel();
 void dungeonResetView();
 
-struct vessel {
-    Player_t *py;
-    Dungeon_t *dg;
-    std::string msg;
-} hold;
+
 
 void clear_floor_threader();
 void threader_dg_floor();

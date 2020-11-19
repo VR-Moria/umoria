@@ -141,8 +141,8 @@ void startMoria(int seed, bool start_new_game) {
 
 
     // initialize struct vessel hold to contain pointers to py and dg for VR use
-    hold.py = &py;
-    hold.dg = &dg;
+     //hold.py = &py;
+    // hold.dg = &dg;
 
     // Loop till dead, or exit
     while (!game.character_is_dead) {

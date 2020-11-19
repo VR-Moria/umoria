@@ -246,7 +246,7 @@ void messageLineClear() {
 // Outputs message to top line of screen
 // These messages are kept for later reference.
 void printMessage(const char *msg) {
-    hold.msg = msg;
+   //hold.msg = msg;
     int new_len = 0;
     int old_len = 0;
     bool combine_messages = false;
